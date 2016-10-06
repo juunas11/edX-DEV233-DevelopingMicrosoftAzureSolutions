@@ -1,0 +1,44 @@
+﻿@model EventsViewModel
+@{
+    ViewBag.Title = "Events";
+}
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Registrants</th>
+                        <th>Document[s]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Event item in Model.Events)
+                    {
+                        <tr>
+                            <td>
+                                @item.Title
+                            </td>
+                            <td>
+                                @item.StartTime.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.Registrants.Count
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-outline-primary btn-sm" href="@Url.Action("SignIn", new { id = item.EventKey })">
+                                        Generate Sign-In Sheet
+                                        <i class="fa fa-inbox" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

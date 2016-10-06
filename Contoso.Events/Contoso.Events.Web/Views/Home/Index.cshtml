@@ -1,0 +1,32 @@
+﻿@model EventsViewModel
+@{
+    ViewBag.Title = "Home";
+    ViewBag.SubTitle = "Upcoming Events";
+}
+<div class="list-group">
+    @foreach (Event item in Model.Events)
+    {
+        <a class="list-group-item list-group-item-action" href="@Url.Action("Event", new { id = item.EventKey })">
+            <h5 class="list-group-item-heading">
+                @item.Title
+                @if (item.Registrants.Count > 0)
+                {
+                    <span class="label label-info pull-right">
+                        @item.Registrants.Count Registered
+                    </span>
+                }
+                else
+                {
+                    <span class="label label-danger pull-right">
+                        No Registrants
+                    </span>
+                }
+            </h5>
+            <small>
+                @item.StartTime.ToString("MMMM dd, yyyy H:mm tt")
+                &nbsp;-&nbsp;
+                @item.EndTime.ToString("MMMM dd, yyyy H:mm tt")
+            </small>
+        </a>
+    }
+</div>

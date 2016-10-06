@@ -1,0 +1,166 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "repositoryUrl": {
+      "type": "string",
+      "defaultValue": "https://github.com/seesharprun/azuredevdemo.git",
+      "metadata": {
+        "description": "The URL for the GitHub repository that contains the project to deploy."
+      }
+    },
+    "repositoryBranch": {
+      "type": "string",
+      "defaultValue": "base-application",
+      "metadata": {
+        "description": "The branch of the GitHub repository to use."
+      }
+    }
+  },
+  "variables": {
+    "identifiers": {
+      "appServicePlanName": "contosoplan",
+      "databaseName": "contosodb",
+      "webSiteName": "[concat('contosoweb', uniqueString(resourceGroup().id))]",
+      "sqlserverName": "[concat('contososrvr', uniqueString(resourceGroup().id))]",
+      "storageName": "[concat('contosostor', uniqueString(resourceGroup().id))]"
+    },
+    "webAppSettings": {
+      "skuName": "S1",
+      "skuCapacity": 1
+    },
+    "databaseSettings": {
+      "requestedServiceObjectiveName": "S1",
+      "maxSizeBytes": "1073741824",
+      "edition": "Standard",
+      "administratorLogin": "Attendee",
+      "administratorLoginPassword": "1stPa$$w0rd",
+      "collation": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "storageSettings": {
+      "accountType": "Standard_LRS"
+    }
+  },
+  "resources": [
+    {
+      "name": "[variables('identifiers').storageName]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "properties": {
+        "accountType": "[variables('storageSettings').accountType]"
+      }
+    },
+    {
+      "name": "[variables('identifiers').sqlserverName]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2014-04-01-preview",
+      "properties": {
+        "administratorLogin": "[variables('databaseSettings').administratorLogin]",
+        "administratorLoginPassword": "[variables('databaseSettings').administratorLoginPassword]"
+      },
+      "resources": [
+        {
+          "name": "[variables('identifiers').databaseName]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('identifiers').sqlserverName)]"
+          ],
+          "properties": {
+            "edition": "[variables('databaseSettings').edition]",
+            "collation": "[variables('databaseSettings').collation]",
+            "maxSizeBytes": "[variables('databaseSettings').maxSizeBytes]",
+            "requestedServiceObjectiveName": "[variables('databaseSettings').requestedServiceObjectiveName]"
+          }
+        },
+        {
+          "type": "firewallrules",
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', variables('identifiers').sqlserverName)]"
+          ],
+          "location": "[resourceGroup().location]",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        }
+      ]
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('identifiers').appServicePlanName]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[variables('webAppSettings').skuName]",
+        "capacity": "[variables('webAppSettings').skuCapacity]"
+      },
+      "properties": {
+        "name": "[variables('identifiers').appServicePlanName]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('identifiers').webSiteName]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverFarms/', variables('identifiers').appServicePlanName)]"
+      ],
+      "properties": {
+        "name": "[variables('identifiers').webSiteName]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('identifiers').appServicePlanName)]",
+        "siteConfig": {
+            "AlwaysOn": true
+        }
+      },
+      "resources": [
+        {
+          "apiVersion": "2015-08-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[concat('Microsoft.Web/Sites/', variables('identifiers').webSiteName)]"
+          ],
+          "properties": {
+            "EventsContextConnectionString": {
+              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', variables('identifiers').sqlserverName)).fullyQualifiedDomainName, ',1433;Initial Catalog=', variables('identifiers').databaseName, ';User Id=', variables('databaseSettings').administratorLogin, '@', variables('identifiers').sqlserverName, ';Password=', variables('databaseSettings').administratorLoginPassword, ';')]",
+              "type": "SQLServer"
+            },
+            "Microsoft.WindowsAzure.Storage.ConnectionString": {
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('identifiers').storageName, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('identifiers').storageName), '2016-01-01').keys[0].value)]",
+              "type": "Custom"
+            },
+            "AzureWebJobsStorage": {
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('identifiers').storageName, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('identifiers').storageName), '2016-01-01').keys[0].value)]",
+              "type": "Custom"
+            },
+            "AzureWebJobsDashboard": {
+              "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('identifiers').storageName, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('identifiers').storageName), '2016-01-01').keys[0].value)]",
+              "type": "Custom"
+            }
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', variables('identifiers').webSiteName)]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('repositoryUrl')]",
+            "branch": "[parameters('repositoryBranch')]",
+            "IsManualIntegration": false
+          }
+        }
+      ]
+    }
+  ]
+}

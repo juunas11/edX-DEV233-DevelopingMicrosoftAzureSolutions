@@ -1,0 +1,39 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+    ViewBag.SubTitle = Model.Event.Title;
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Please resolve the following errors:</h4>
+        @Html.ValidationSummary()
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Event.Id)
+    @Html.HiddenFor(model => model.Event.Title)
+    @Html.HiddenFor(model => model.Event.Description)
+    @Html.HiddenFor(model => model.Event.EventKey)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Registration.FirstName)
+        @Html.TextBoxFor(model => model.Registration.FirstName, new { @type = "text", placeholder = "Enter first name", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Registration.LastName)
+        @Html.TextBoxFor(model => model.Registration.LastName, new { @type = "text", placeholder = "Enter last name", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Registration.EmailAddress)
+        @Html.TextBoxFor(model => model.Registration.EmailAddress, new { @type = "email", placeholder = "Enter e-mail address", @class = "form-control" })
+        <small class="form-text text-muted">We respect the privacy of your e-mail address</small>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Registration.Referrer)
+        @Html.EnumDropDownListFor(model => model.Registration.Referrer, "Select an option", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}

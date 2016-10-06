@@ -1,0 +1,10 @@
+﻿@model Guid?
+@{
+    ViewBag.Title = ViewBag.SubTitle = "Thanks for Registering!";
+}
+<p>
+    Your registration Id is: <small>@Model</small>
+</p>
+<p>
+    @Html.ActionLink("Go back to Event List", "Index", new { }, new { @class = "btn btn-primary btn-lg" })
+</p>

@@ -1,32 +1,40 @@
-﻿@model EventsViewModel
+@model EventsViewModel
 @{
     ViewBag.Title = "Home";
     ViewBag.SubTitle = "Upcoming Events";
 }
-<div class="list-group">
-    @foreach (Event item in Model.Events)
-    {
-        <a class="list-group-item list-group-item-action" href="@Url.Action("Event", new { id = item.EventKey })">
-            <h5 class="list-group-item-heading">
-                @item.Title
-                @if (item.Registrants.Count > 0)
-                {
-                    <span class="label label-info pull-right">
-                        @item.Registrants.Count Registered
-                    </span>
-                }
-                else
-                {
-                    <span class="label label-danger pull-right">
-                        No Registrants
-                    </span>
-                }
-            </h5>
-            <small>
-                @item.StartTime.ToString("MMMM dd, yyyy H:mm tt")
-                &nbsp;-&nbsp;
-                @item.EndTime.ToString("MMMM dd, yyyy H:mm tt")
-            </small>
-        </a>
-    }
+<div class="card-deck-wrapper">
+    <div class="card-deck">
+        @foreach (Event item in Model.Events)
+        {
+            <div class="card">
+                <div class="card-header">
+                    @if (item.Registrants.Count > 0)
+                    {
+                        <span>
+                            @item.Registrants.Count Registered
+                        </span>
+                    }
+                    else
+                    {
+                        <span>
+                            No Registrants
+                        </span>
+                    }
+                </div>
+                <div class="card-block">
+                    <h4 class="card-title">@item.Title</h4>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            @item.StartTime.ToString("MMMM dd, yyyy H:mm tt")
+                            &nbsp;-&nbsp;
+                            @item.EndTime.ToString("MMMM dd, yyyy H:mm tt")
+                        </small>
+                    </p>
+                    <p class="card-text">@item.Description</p>
+                    <a href="@Url.Action("Event", new { id = item.EventKey })" class="card-link">View Event Details</a>
+                </div>
+            </div>
+        }
+    </div>
 </div>

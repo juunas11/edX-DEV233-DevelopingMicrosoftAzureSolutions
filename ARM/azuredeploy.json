@@ -11,7 +11,7 @@
     },
     "repositoryBranch": {
       "type": "string",
-      "defaultValue": "base-application",
+      "defaultValue": "hackathon",
       "metadata": {
         "description": "The branch of the GitHub repository to use."
       }

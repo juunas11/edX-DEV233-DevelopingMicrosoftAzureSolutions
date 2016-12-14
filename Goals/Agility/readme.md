@@ -18,3 +18,19 @@ Here are some basic requirements:
 ### Demonstrate
 
 Your group could be called on to review how you can track, review and merge changes as a team. You may also be asked to demonstrate a small change in the application being automatically deployed to Azure.
+
+## Modernizing the Events Page
+
+You will now prove that your continuous deployment solution works by updating code in GitHub and deploying it automatically to an Azure Web App instance. You should be able to use the GitHub flow to create branches for each feature and have various team members work on the specific features in their dedicated branch. Once complete, these team members can issue a pull request to merge their features back to the master branch. Your continuous deployment solution should then automatically deploy the code to Azure and you should immediately see the changes in the Web App solution. Your goal is to prove your continuous deployment workflow by implementing a simple real-world feature.
+
+### Requirements
+
+Here are some basic requirements:
+
+- The solution should change the appearance of the home page listing all events.
+- The solution should change the appearance of the event detail page listing details for an individual event.
+- Use Bootstrap 4 UI components exclusively for each page that is changed.
+
+### Demonstrate
+
+Your group could be called on to demonstrate your changes to the home page (showing all events) and the event-detail page (showing a single event).

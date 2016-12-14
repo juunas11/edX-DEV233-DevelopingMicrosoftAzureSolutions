@@ -1,4 +1,4 @@
-# Search
+# Security
 
 Your next task will be to implement a simple security feature that will allow you to protect user information within your application. You will also implement a higher-level authorization scheme that will protect the administration features from anonymous access. 
 

@@ -1,6 +1,6 @@
 # Agility
 
-Your first task will be to create an agile development and deployment solution that will allow your team to work together to author the solution and automatically deploy it to Azure. You will make a small change to the application as your second task to validate that your solution works. At this point, if you
+Your first task will be to create an agile development and deployment solution that will allow your team to work together to author the solution and automatically deploy it to Azure. You will make a small change to the application as your second task to validate that your solution works.
 
 ## Configuring a Continuous Deployment Solution
 

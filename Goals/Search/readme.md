@@ -29,7 +29,7 @@ Here are some basic requirements:
 
 - Create an API endpoint from your application to search events (**Hint:** You can use MVC Web API to create an `APIController` implementation).
 - Integrate your application's HTTP endpoint as an API within the API Management service.
-- Expose your API Management APIs using a Product.
+- Expose your API Management APIs using an Operation.
 
 ### Demonstrate
 

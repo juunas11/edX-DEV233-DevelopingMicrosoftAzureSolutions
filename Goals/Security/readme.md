@@ -28,7 +28,7 @@ Here are some basic requirements:
 
 - Implement ASP.NET Identity in your web application.
 - Implement Azure Active Directory as the sole identity provider for your web application.
-- Use the [Authorize] class attribute to indicate that the Administration ASP.NET MVC Area is the only area that should be protected using Azure AD Authentication.
+- Use the `[Authorize]` MVC class attribute to indicate that the Administration ASP.NET MVC Area is the only area that should be protected using Azure AD Authentication.
 - Add a hyperlink in the web application that directs the user to the Administration portion of the site.
 
 ### Demonstrate

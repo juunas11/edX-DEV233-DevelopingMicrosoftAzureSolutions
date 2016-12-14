@@ -4,7 +4,7 @@
   "parameters": {
     "repositoryUrl": {
       "type": "string",
-      "defaultValue": "https://github.com/seesharprun/azuredevdemo.git",
+      "defaultValue": "https://github.com/MicrosoftLearning/edX-DEV233-DevelopingMicrosoftAzureSolutions.git",
       "metadata": {
         "description": "The URL for the GitHub repository that contains the project to deploy."
       }
@@ -84,7 +84,7 @@
             "[concat('Microsoft.Sql/servers/', variables('identifiers').sqlserverName)]"
           ],
           "location": "[resourceGroup().location]",
-          "name": "AllowAllWindowsAzureIps",
+          "name": "AllowAllIps",
           "properties": {
             "endIpAddress": "0.0.0.0",
             "startIpAddress": "0.0.0.0"

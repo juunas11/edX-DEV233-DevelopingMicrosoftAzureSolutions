@@ -1,0 +1,33 @@
+﻿@model SearchViewModel
+
+@{
+    ViewBag.Title = "Search";
+    ViewBag.SubTitle = "Search Events";
+}
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Get))
+{
+    @Html.TextBoxFor(m => m.Term, new {@class = "form-control"})
+
+    <input type="submit" value="Search" class="btn btn-default"/>
+}
+
+@if (Model.SearchResults != null)
+{
+    foreach (var item in Model.SearchResults)
+    {
+        <p>Id: @item.Id</p>
+        <p>Search score: @item.SearchScore</p>
+        <p>Event key: @item.EventKey</p>
+        <p>Title: @item.Title</p>
+        <p>Description: @item.Description</p>
+        <p>Start time: @item.StartTime</p>
+        <p>End time: @item.EndTime</p>
+        <hr/>
+    }
+}
+
+@if (Model.SearchResults == null || Model.SearchResults.Count == 0)
+{
+    <p>No results found.</p>
+}

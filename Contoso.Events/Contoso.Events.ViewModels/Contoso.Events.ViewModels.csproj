@@ -93,6 +93,7 @@
     <Compile Include="DownloadViewModel.cs" />
     <Compile Include="RegisterViewModel.cs" />
     <Compile Include="EventViewModel.cs" />
+    <Compile Include="SearchViewModel.cs" />
     <Compile Include="SignInSheetViewModel.cs" />
     <Compile Include="EventsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

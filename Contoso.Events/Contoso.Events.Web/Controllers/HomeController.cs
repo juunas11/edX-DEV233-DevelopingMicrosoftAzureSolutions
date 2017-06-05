@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Contoso.Events.Models;
+using Contoso.Events.Web.Services;
 using Newtonsoft.Json;
 
 namespace Contoso.Events.Web.Controllers
@@ -29,20 +30,11 @@ namespace Contoso.Events.Web.Controllers
             {
                 searchTerm = "*";
             }
-            string url = $"https://aa-events-prod-search.search.windows.net/indexes/aa-events-index/docs?search={searchTerm}&api-version=2016-09-01";
-
-            var req = new HttpRequestMessage(HttpMethod.Get, url);
-            string accessKey = ConfigurationManager.AppSettings["SearchAccessKey"];
-            req.Headers.Add("api-key", accessKey);
-            req.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            HttpResponseMessage res = await Client.SendAsync(req);
-
-            string json = await res.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<AzureSearchResult<EventSearchResult>>(json);
+            var searchService = new SearchService();
 
             model.Term = searchTerm;
-            model.SearchResults = result.Items;
+            var results = await searchService.SearchEventsAsync(searchTerm);
+            model.SearchResults = results.Items;
 
             return View(model);
         }

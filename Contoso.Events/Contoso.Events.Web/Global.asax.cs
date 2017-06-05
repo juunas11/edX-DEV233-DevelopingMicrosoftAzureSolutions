@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -8,6 +9,8 @@ namespace Contoso.Events.Web
     {
         protected void Application_Start()
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+
             AreaRegistration.RegisterAllAreas();
 
             GlobalFilters.Filters.Add(new HandleErrorAttribute());

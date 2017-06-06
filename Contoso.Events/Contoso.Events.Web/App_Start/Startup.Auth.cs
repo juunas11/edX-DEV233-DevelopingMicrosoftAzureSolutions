@@ -34,7 +34,6 @@ namespace Contoso.Events.Web
 
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
             {
-                AuthenticationMode = AuthenticationMode.Active,
                 Authority = ConfigurationManager.AppSettings["aad:Authority"],
                 ClientId = ConfigurationManager.AppSettings["aad:ClientId"],
                 PostLogoutRedirectUri = ConfigurationManager.AppSettings["aad:PostLogoutRedirectUri"],
